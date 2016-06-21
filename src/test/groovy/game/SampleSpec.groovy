@@ -2,15 +2,14 @@ package game
 
 import spock.lang.Specification
 
-import static game.Swipe.swipe
-import static game.SwipeDirection.HEAD
-import static game.SwipeDirection.TAIL
-
+import static RowSwipeDirection.HEAD
+import static RowSwipeDirection.TAIL
+import static game.SwipeSeq.swipeSeq
 
 class SampleSpec extends Specification {
     def "should not move anything if row is empty or filled with non-collapsible tiles"() {
         expect:
-        swipe(input, dir) == output
+        swipeSeq(input as int[], dir) == output as int[]
 
         where:
         input        | dir  | output
@@ -20,7 +19,7 @@ class SampleSpec extends Specification {
 
     def "should not move a single tile if it is on the edge"() {
         expect:
-        swipe(input, dir) == output
+        swipeSeq(input as int[], dir) == output as int[]
 
         where:
         input        | dir  | output
@@ -30,7 +29,7 @@ class SampleSpec extends Specification {
 
     def "should move non-collapsing tiles to the edge"() {
         expect:
-        swipe(input, dir) == output
+        swipeSeq(input as int[], dir) == output as int[]
 
         where:
         input        | dir  | output
@@ -43,7 +42,7 @@ class SampleSpec extends Specification {
 
     def "should collapse two adjacent tiles with the same number"() {
         expect:
-        swipe(input, dir) == output
+        swipeSeq(input as int[], dir) == output as int[]
 
         where:
         input        | dir  | output
@@ -70,7 +69,7 @@ class SampleSpec extends Specification {
 
     def "should collapse a double pair of adjacent tiles with the same number"() {
         expect:
-        swipe(input, dir) == output
+        swipeSeq(input as int[], dir) == output as int[]
 
         where:
         input        | dir  | output

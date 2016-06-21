@@ -1,6 +1,6 @@
 package game
 
-enum SwipeDirection {
+enum RowSwipeDirection {
     HEAD, TAIL
 }
 
