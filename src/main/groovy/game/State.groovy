@@ -76,16 +76,40 @@ class State {
         return newState
     }
     
-    public State placeNewTile() {
-        Position newTile = random.roll(size)
+    private Position findPlaceForNewTile() {
+        if (grid.every { int[] row -> !(0 in row)}) {
+            return null
+        }
         
+        Position pos
+        while (true) {
+            pos = random.roll(size)
+            if (grid[pos.row][pos.col] == 0) {
+                break
+            } 
+        }
+        return pos
+    }
+
+
+    // may do nothing
+    public State placeNewTile() {
+        Position newTile = findPlaceForNewTile()
         State newState = copy()
+        
+        if (newTile == null) {
+            return newState
+        }
+        
         newState.grid[newTile.row][newTile.col] = START_VALUE
         return newState
     }
 
     public State iterate(GridSwipeDirection direction) {
-        swipe(direction).placeNewTile()
+        if (possibleMoves.empty) {
+            throw new GameOverException()
+        }
+        return swipe(direction).placeNewTile()
     }
 
     @Override
@@ -96,5 +120,10 @@ class State {
 
         State other = obj as State
         return (0..<grid.length).every { int row -> Arrays.equals(grid[row], other.grid[row]) }
+    }
+
+    @Override
+    String toString() {
+        grid.collect { int[] row -> Arrays.toString(row).replace('0', ' ') }.join("\n")
     }
 }

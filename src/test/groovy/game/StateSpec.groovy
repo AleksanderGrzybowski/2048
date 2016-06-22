@@ -89,7 +89,43 @@ class StateSpec extends Specification {
 
         then:
         state.at(pos(0, 0)) == State.START_VALUE
+    }
 
+    def "should not replace tiles when placing new tile - take another random position"() {
+        given:
+        random.roll(4) >> { pos(0, 0) } >> { pos(0, 1) }
+        State state = new State(
+                [[3, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )
+        state.random = random
+
+        when:
+        state = state.placeNewTile()
+
+        then:
+        state.at(pos(0, 0)) == 3
+        state.at(pos(0, 1)) == State.START_VALUE
+    }
+    
+    def "should not place new tile if there is no space left"() {
+        given:
+        State state = new State(
+                [[3, 3, 3, 3],
+                 [3, 3, 3, 3],
+                 [3, 3, 3, 3],
+                 [3, 3, 3, 3],
+                ] as int[][]
+        )
+
+        when:
+        State newState = state.placeNewTile()
+
+        then:
+        state == newState
     }
 
     def "should compare with equals - true"() {
