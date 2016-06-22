@@ -23,59 +23,152 @@ class StateSpec extends Specification {
         state.at(pos(0, 1)) == 2
     }
 
-    def "in new game, after swiping left (no collapsing) should put new tile"() {
-        given:
-        random.roll(4) >> { pos(0, 0) } >> { pos(1, 1) } >> { pos(3, 3) }
-        State state = new State(4, random)
+    def "should swipe properly"() {
+        expect:
+        previousState.swipe(direction) == nextState
 
-        when:
-        state = state.swipe(LEFT)
+        where:
 
-        then:
-        state.at(pos(0, 0)) == 2
-        state.at(pos(1, 0)) == 2
-        state.at(pos(3, 3)) == 2
+        previousState         | nextState | direction
+        new State(
+                [[0, 0, 0, 0],
+                 [0, 1, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]) | new State(
+                [[0, 0, 0, 0],
+                 [1, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )                                 | LEFT
+        new State(
+                [[0, 0, 0, 0],
+                 [0, 1, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]) | new State(
+                [[0, 0, 0, 0],
+                 [0, 0, 0, 1],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )                                 | RIGHT
+        new State(
+                [[0, 0, 0, 0],
+                 [0, 1, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]) | new State(
+                [[0, 1, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )                                 | TOP
+        new State(
+                [[0, 0, 0, 0],
+                 [0, 1, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]) | new State(
+                [[0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 1, 0, 0],
+                ] as int[][]
+        )                                 | BOTTOM
     }
 
-    def "in new game, after swiping right (no collapsing) should put new tile"() {
+    def "should place new tile"() {
         given:
-        random.roll(4) >> { pos(0, 0) } >> { pos(1, 1) } >> { pos(0, 0) }
-        State state = new State(4, random)
+        random.roll(4) >> { pos(0, 0) }
 
         when:
-        state = state.swipe(RIGHT)
+        State state = new State(4, random)
 
         then:
-        state.at(pos(0, 3)) == 2
-        state.at(pos(1, 3)) == 2
-        state.at(pos(0, 0)) == 2
+        state.at(pos(0, 0)) == State.START_VALUE
+
     }
 
-    def "in new game, after swiping top (no collapsing) should put new tile"() {
+    def "should compare with equals - true"() {
         given:
-        random.roll(4) >> { pos(3, 0) } >> { pos(3, 1) } >> { pos(3, 3) }
-        State state = new State(4, random)
+        State stateA = new State(
+                [[1, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )
+        State stateB = new State(
+                [[1, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )
 
-        when:
-        state = state.swipe(TOP)
-
-        then:
-        state.at(pos(0, 0)) == 2
-        state.at(pos(0, 1)) == 2
-        state.at(pos(3, 3)) == 2
+        expect:
+        stateA == stateB
     }
 
-    def "in new game, after swiping bottom (no collapsing) should put new tile"() {
+    def "should compare with equals - false"() {
         given:
-        random.roll(4) >> { pos(0, 0) } >> { pos(0, 1) } >> { pos(3, 3) }
-        State state = new State(4, random)
+        State stateA = new State(
+                [[1, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 1, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )
+        State stateB = new State(
+                [[1, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        )
 
-        when:
-        state = state.swipe(BOTTOM)
+        expect:
+        stateA != stateB
+    }
 
-        then:
-        state.at(pos(3, 0)) == 2
-        state.at(pos(3, 1)) == 2
-        state.at(pos(3, 3)) == 2
+    def "should check which moves are available"() {
+        expect:
+        new State(grid).possibleMoves as Set == possibleMoves as Set
+
+        where:
+        grid         | possibleMoves
+        [[1, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+        ] as int[][] | [RIGHT, BOTTOM]
+        [[0, 0, 0, 1],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+        ] as int[][] | [LEFT, BOTTOM]
+        [[0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 1],
+        ] as int[][] | [LEFT, TOP]
+        [[0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [1, 0, 0, 0],
+        ] as int[][] | [RIGHT, TOP]
+        [[1, 2, 1, 2],
+         [1, 3, 2, 1],
+         [1, 2, 1, 2],
+         [2, 1, 2, 1],
+        ] as int[][] | [TOP, BOTTOM]
+        [[1, 2, 1, 2],
+         [2, 1, 2, 1],
+         [1, 2, 1, 2],
+         [2, 1, 2, 1],
+        ] as int[][] | []
     }
 }

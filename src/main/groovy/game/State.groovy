@@ -21,12 +21,24 @@ class State {
 
     private State() {}
 
+    public State(int[][] startingGrid) {
+        this.grid = new int[startingGrid.length][]
+        (0..<startingGrid.length).each { int row ->
+            this.grid[row] = startingGrid[row].clone()
+        }
+    }
+
     public int getSize() {
         grid.length
     }
 
     public int at(Position pos) {
         grid[pos.row][pos.col]
+    }
+
+    public Collection<GridSwipeDirection> getPossibleMoves() {
+        //noinspection UnnecessaryQualifiedReference
+        GridSwipeDirection.values().findAll { GridSwipeDirection dir -> swipe(dir) != this }
     }
 
     private State copy() {
@@ -47,23 +59,42 @@ class State {
         (0..<size).each { int i -> grid[i][col] = content[i] }
     }
 
-    public State swipe(GridSwipeDirection dir) {
+
+    public State swipe(GridSwipeDirection direction) {
         State newState = copy()
-
-        if (dir in [LEFT, RIGHT]) {
+        if (direction in [LEFT, RIGHT]) {
             (0..<size).each { int row ->
-                newState.grid[row] = SwipeSeq.swipeSeq(newState.grid[row], dir == LEFT ? HEAD : TAIL)
+                newState.grid[row] = SwipeSeq.swipeSeq(newState.grid[row], direction == LEFT ? HEAD : TAIL)
             }
         }
-        if (dir in [TOP, BOTTOM]) {
+        if (direction in [TOP, BOTTOM]) {
             (0..<size).each { int col ->
-                newState.replaceCol(col, SwipeSeq.swipeSeq(newState.extractCol(col), dir == TOP ? HEAD : TAIL))
+                newState.replaceCol(col, SwipeSeq.swipeSeq(newState.extractCol(col), direction == TOP ? HEAD : TAIL))
             }
         }
-
-        Position newTile = random.roll(size)
-        newState.grid[newTile.row][newTile.col] = START_VALUE
 
         return newState
+    }
+    
+    public State placeNewTile() {
+        Position newTile = random.roll(size)
+        
+        State newState = copy()
+        newState.grid[newTile.row][newTile.col] = START_VALUE
+        return newState
+    }
+
+    public State iterate(GridSwipeDirection direction) {
+        swipe(direction).placeNewTile()
+    }
+
+    @Override
+    boolean equals(Object obj) {
+        if (!(obj instanceof State)) {
+            return false
+        }
+
+        State other = obj as State
+        return (0..<grid.length).every { int row -> Arrays.equals(grid[row], other.grid[row]) }
     }
 }
