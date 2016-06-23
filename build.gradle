@@ -1,5 +1,8 @@
-apply plugin: 'groovy'
-apply plugin: 'idea'
+plugins {
+    id 'groovy'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
 
 description = "2048"
 
@@ -7,6 +10,12 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': '')
+    }
 }
 
 dependencies {
