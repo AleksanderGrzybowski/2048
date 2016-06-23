@@ -5,7 +5,7 @@ import static game.RowSwipeDirection.HEAD
 import static game.RowSwipeDirection.TAIL
 
 class State {
-    public static final int START_VALUE = 2
+    public static int START_VALUE = 2
     private int[][] grid
     private Chance random
 
