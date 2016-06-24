@@ -2,9 +2,9 @@ package game
 
 import spock.lang.Specification
 
-import static RowSwipeDirection.HEAD
-import static RowSwipeDirection.TAIL
-import static game.SwipeSeq.swipeSeq
+import static game.core.RowSwipeDirection.HEAD
+import static game.core.RowSwipeDirection.TAIL
+import static game.core.SwipeSeq.swipeSeq
 
 class SampleSpec extends Specification {
     def "should not move anything if row is empty or filled with non-collapsible tiles"() {

@@ -1,9 +1,12 @@
 package game
 
+import game.core.Chance
+import game.core.GameOverException
+import game.core.State
 import spock.lang.Specification
 
-import static game.GridSwipeDirection.*
-import static game.Position.pos
+import static game.core.GridSwipeDirection.*
+import static game.core.Position.pos
 
 class StateSpec extends Specification {
 

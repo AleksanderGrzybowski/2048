@@ -1,6 +1,11 @@
-package game
+package game.network
 
-import static game.GridSwipeDirection.*
+import game.core.Chance
+import game.core.ChanceImpl
+import game.core.GridSwipeDirection
+import game.core.State
+
+import static game.core.GridSwipeDirection.*
 
 class Session {
     private Chance random = new ChanceImpl()

@@ -1,4 +1,4 @@
-package game
+package game.core
 
 class ChanceImpl implements Chance {
     

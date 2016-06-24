@@ -1,8 +1,8 @@
-package game
+package game.core
 
-import static game.GridSwipeDirection.*
-import static game.RowSwipeDirection.HEAD
-import static game.RowSwipeDirection.TAIL
+import static GridSwipeDirection.*
+import static RowSwipeDirection.HEAD
+import static RowSwipeDirection.TAIL
 
 class State {
     private int[][] grid

@@ -1,4 +1,4 @@
-package game
+package game.network
 
 public interface IO {
     char read()

@@ -1,4 +1,4 @@
-package game
+package game.network
 
 class Handler implements Runnable {
 

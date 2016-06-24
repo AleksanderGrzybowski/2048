@@ -1,4 +1,4 @@
-package game
+package game.core
 
 private static int[] shiftTo(int[] input, RowSwipeDirection direction) {
     List<Integer> inputList = input.clone() as List<Integer> // for removeAll
