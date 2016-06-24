@@ -14,7 +14,9 @@ class Session {
     }
 
     public void go() {
-        io.write("Hello\r\nWhich grid size? (2-9) ")
+        System.getResourceAsStream("/banner.txt").readLines().each { io.write(it + "\r\n") }
+        io.write("\r\nWhich grid size? (2-9) ")
+        
         int gridSize = Integer.parseInt(io.read() as String)
         State state = new State(gridSize, random)
 
