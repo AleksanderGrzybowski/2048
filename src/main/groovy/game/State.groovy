@@ -75,32 +75,31 @@ class State {
 
         return newState
     }
-    
+
     private Position findPlaceForNewTile() {
-        if (grid.every { int[] row -> !(0 in row)}) {
+        if (grid.every { int[] row -> !(0 in row) }) {
             return null
         }
-        
+
         Position pos
         while (true) {
             pos = random.roll(size)
             if (grid[pos.row][pos.col] == 0) {
                 break
-            } 
+            }
         }
         return pos
     }
-
 
     // may do nothing
     public State placeNewTile() {
         Position newTile = findPlaceForNewTile()
         State newState = copy()
-        
+
         if (newTile == null) {
             return newState
         }
-        
+
         newState.grid[newTile.row][newTile.col] = START_VALUE
         return newState
     }
@@ -124,6 +123,17 @@ class State {
 
     @Override
     String toString() {
-        grid.collect { int[] row -> Arrays.toString(row).replace('0', ' ') }.join("\n")
+        String result = ""
+
+        grid.each { int[] row ->
+            result += "+------" * size + "+\n"
+            result += "|      " * size + "|\n"
+            row.each { int value -> result += "| " + (value == 0 ? '    ' : String.format("%4d", value)) + " " }
+            result += "|\n"
+            result += "|      " * size + "|\n"
+        }
+        result += "+------" * size + "+\n"
+
+        return result
     }
 }
