@@ -103,6 +103,10 @@ class State {
         newState.grid[newTile.row][newTile.col] = START_VALUE
         return newState
     }
+    
+    public boolean isGameOver() {
+        possibleMoves.empty
+    }
 
     public State iterate(GridSwipeDirection direction) {
         if (possibleMoves.empty) {
