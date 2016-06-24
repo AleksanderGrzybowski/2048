@@ -1,6 +1,5 @@
-package game
+package game.network
 
-import game.network.Handler
 import groovy.util.logging.Log
 
 @Log

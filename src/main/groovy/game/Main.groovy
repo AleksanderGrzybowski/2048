@@ -1,5 +1,7 @@
 package game
 
+import game.network.Server
+
 class Main {
 
     private static int DEFAULT_PORT = 5432
