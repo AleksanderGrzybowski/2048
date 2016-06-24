@@ -13,14 +13,15 @@ class StateSpec extends Specification {
         random = Stub(Chance)
     }
 
-    def "should create new game state with two starting tiles with value 2"() {
+    def "should create new game state with two starting tiles with two random values"() {
         when:
         random.roll(4) >> { pos(0, 0) } >> { pos(0, 1) }
+        random.nextTile() >> { 2 } >> { 4 }
         State state = new State(4, random)
 
         then:
         state.at(pos(0, 0)) == 2
-        state.at(pos(0, 1)) == 2
+        state.at(pos(0, 1)) == 4
     }
 
     def "should swipe properly"() {
@@ -80,20 +81,10 @@ class StateSpec extends Specification {
         )                                 | BOTTOM
     }
 
-    def "should place new tile"() {
-        given:
-        random.roll(4) >> { pos(0, 0) }
-
-        when:
-        State state = new State(4, random)
-
-        then:
-        state.at(pos(0, 0)) == State.START_VALUE
-    }
-
     def "should not replace tiles when placing new tile - take another random position"() {
         given:
         random.roll(4) >> { pos(0, 0) } >> { pos(0, 1) }
+        random.nextTile() >> { 4 }
         State state = new State(
                 [[3, 0, 0, 0],
                  [0, 0, 0, 0],
@@ -108,9 +99,9 @@ class StateSpec extends Specification {
 
         then:
         state.at(pos(0, 0)) == 3
-        state.at(pos(0, 1)) == State.START_VALUE
+        state.at(pos(0, 1)) == 4
     }
-    
+
     def "should not place new tile if there is no space left"() {
         given:
         State state = new State(

@@ -8,4 +8,9 @@ class ChanceImpl implements Chance {
     Position roll(int gridSize) {
         return Position.pos(random.nextInt(gridSize), random.nextInt(gridSize))
     }
+
+    @Override
+    int nextTile() {
+        return (random.nextDouble() < 0.66) ? 2 : 4
+    }
 }

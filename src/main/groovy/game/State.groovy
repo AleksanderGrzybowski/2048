@@ -5,7 +5,6 @@ import static game.RowSwipeDirection.HEAD
 import static game.RowSwipeDirection.TAIL
 
 class State {
-    public static int START_VALUE = 2
     private int[][] grid
     private Chance random
 
@@ -14,9 +13,9 @@ class State {
         grid = new int[gridSize][gridSize]
 
         Position p1 = random.roll(gridSize)
-        grid[p1.row][p1.col] = START_VALUE
+        grid[p1.row][p1.col] = random.nextTile()
         Position p2 = random.roll(gridSize)
-        grid[p2.row][p2.col] = START_VALUE
+        grid[p2.row][p2.col] = random.nextTile()
     }
 
     private State() {}
@@ -100,7 +99,7 @@ class State {
             return newState
         }
 
-        newState.grid[newTile.row][newTile.col] = START_VALUE
+        newState.grid[newTile.row][newTile.col] = random.nextTile()
         return newState
     }
     
