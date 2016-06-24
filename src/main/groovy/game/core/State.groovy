@@ -1,53 +1,54 @@
 package game.core
 
-import static GridSwipeDirection.*
 import static RowSwipeDirection.HEAD
 import static RowSwipeDirection.TAIL
+import static game.core.GridSwipeDirection.*
+import static game.core.SwipeSeq.swipeSeq
 
 class State {
+
     private int[][] grid
     private Chance random
 
-    public State(int gridSize, Chance random) {
+    State(int gridSize, Chance random) {
         this.random = random
-        grid = new int[gridSize][gridSize]
+        this.grid = new int[gridSize][gridSize]
 
-        Position p1 = random.roll(gridSize)
-        grid[p1.row][p1.col] = random.nextTile()
-        Position p2 = random.roll(gridSize)
-        grid[p2.row][p2.col] = random.nextTile()
+        2.times {
+            Position pos = random.roll(gridSize)
+            grid[pos.row][pos.col] = random.nextTile()
+        }
     }
 
-    private State() {}
-
-    public State(int[][] startingGrid) {
+    State(int[][] startingGrid) {
         this.grid = new int[startingGrid.length][]
         (0..<startingGrid.length).each { int row ->
             this.grid[row] = startingGrid[row].clone()
         }
     }
+    
+    private State() {}
 
-    public int getSize() {
+    int getSize() {
         grid.length
     }
 
-    public int at(Position pos) {
+    int at(Position pos) {
         grid[pos.row][pos.col]
     }
 
-    public Collection<GridSwipeDirection> getPossibleMoves() {
+    Collection<GridSwipeDirection> getPossibleMoves() {
         //noinspection UnnecessaryQualifiedReference
         GridSwipeDirection.values().findAll { GridSwipeDirection dir -> swipe(dir) != this }
     }
 
     private State copy() {
-        State cloned = new State()
-        cloned.random = random
-        cloned.grid = new int[size][size]
+        int[][] newGrid= new int[size][size]
         (0..<size).each { int row ->
-            cloned.grid[row] = grid[row].clone()
+            newGrid[row] = grid[row].clone()
         }
-        return cloned
+        
+        return new State(random: random, grid: newGrid)
     }
 
     private int[] extractCol(int col) {
@@ -58,17 +59,17 @@ class State {
         (0..<size).each { int i -> grid[i][col] = content[i] }
     }
 
-
-    public State swipe(GridSwipeDirection direction) {
+    State swipe(GridSwipeDirection direction) {
         State newState = copy()
+        
         if (direction in [LEFT, RIGHT]) {
             (0..<size).each { int row ->
-                newState.grid[row] = SwipeSeq.swipeSeq(newState.grid[row], direction == LEFT ? HEAD : TAIL)
+                newState.grid[row] = swipeSeq(newState.grid[row], direction == LEFT ? HEAD : TAIL)
             }
         }
         if (direction in [TOP, BOTTOM]) {
             (0..<size).each { int col ->
-                newState.replaceCol(col, SwipeSeq.swipeSeq(newState.extractCol(col), direction == TOP ? HEAD : TAIL))
+                newState.replaceCol(col, swipeSeq(newState.extractCol(col), direction == TOP ? HEAD : TAIL))
             }
         }
 
@@ -81,36 +82,38 @@ class State {
         }
 
         Position pos
-        while (true) {
+        while (true) { // very naive, but okay in most cases
             pos = random.roll(size)
             if (grid[pos.row][pos.col] == 0) {
                 break
             }
         }
+        
         return pos
     }
 
     // may do nothing
-    public State placeNewTile() {
+    State placeNewTile() {
         Position newTile = findPlaceForNewTile()
-        State newState = copy()
 
         if (newTile == null) {
-            return newState
+            return this
         }
 
+        State newState = copy()
         newState.grid[newTile.row][newTile.col] = random.nextTile()
         return newState
     }
-    
-    public boolean isGameOver() {
+
+    boolean isGameOver() {
         possibleMoves.empty
     }
 
-    public State iterate(GridSwipeDirection direction) {
+    State iterate(GridSwipeDirection direction) {
         if (possibleMoves.empty) {
             throw new GameOverException()
         }
+        
         return swipe(direction).placeNewTile()
     }
 

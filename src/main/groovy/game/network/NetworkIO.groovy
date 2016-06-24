@@ -1,7 +1,7 @@
 package game.network
 
 class NetworkIO implements IO {
-    
+
     private InputStream input
     private PrintWriter output
 

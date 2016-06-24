@@ -1,6 +1,7 @@
 package game.network
 
-public interface IO {
+interface IO {
     char read()
+
     void write(String message)
 }
