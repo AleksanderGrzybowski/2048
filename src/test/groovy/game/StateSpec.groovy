@@ -161,6 +161,17 @@ class StateSpec extends Specification {
         stateA != stateB
     }
 
+    def "states can be compared only to other states"() {
+        expect:
+        new State(
+                [[1, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                ] as int[][]
+        ) != new Object()
+    }
+
     def "should check which moves are available"() {
         expect:
         new State(grid).possibleMoves as Set == possibleMoves as Set
@@ -197,5 +208,90 @@ class StateSpec extends Specification {
          [1, 2, 1, 2],
          [2, 1, 2, 1],
         ] as int[][] | []
+    }
+
+    def "should tell if is game over - true"() {
+        expect:
+        new State(
+                [[1, 2, 3, 4],
+                 [4, 3, 2, 1],
+                 [1, 2, 3, 4],
+                 [4, 3, 2, 1],
+                ] as int[][]
+        ).gameOver
+    }
+
+    def "should tell if is game over - false"() {
+        expect:
+        !new State(
+                [[1, 2, 3, 4],
+                 [4, 2, 2, 1],
+                 [1, 2, 3, 4],
+                 [4, 3, 2, 1],
+                ] as int[][]
+        ).gameOver
+    }
+
+    def "should create new game state and perform one iteration"() {
+        given:
+        random.roll(4) >> { pos(0, 0) } >> { pos(0, 1) } >> { pos(3, 3) }
+        random.nextTile() >> { 2 } >> { 2 } >> { 4 }
+        State state = new State(4, random)
+
+        when:
+        state = state.iterate(RIGHT)
+
+        then:
+        state.at(pos(0, 3)) == 4
+        state.at(pos(3, 3)) == 4
+    }
+
+    def "should not allow to perform iteration if there is no possible move"() {
+        given:
+        State state = new State(
+                [[1, 2, 3, 4],
+                 [4, 3, 2, 1],
+                 [1, 2, 3, 4],
+                 [4, 3, 2, 1],
+                ] as int[][]
+        )
+
+
+        when:
+        state.iterate()
+
+        then:
+        thrown(GameOverException)
+    }
+
+    def "should convert to string representation"() {
+        State state = new State(
+                [[1, 2, 31, 4],
+                 [4, 3, 2, 1],
+                 [1, 2, 341, 4],
+                 [4, 3, 2, 1],
+                ] as int[][]
+        )
+        
+        String stringified = "+------+------+------+------+\n" +
+                "|      |      |      |      |\n" +
+                "|    1 |    2 |   31 |    4 |\n" +
+                "|      |      |      |      |\n" +
+                "+------+------+------+------+\n" +
+                "|      |      |      |      |\n" +
+                "|    4 |    3 |    2 |    1 |\n" +
+                "|      |      |      |      |\n" +
+                "+------+------+------+------+\n" +
+                "|      |      |      |      |\n" +
+                "|    1 |    2 |  341 |    4 |\n" +
+                "|      |      |      |      |\n" +
+                "+------+------+------+------+\n" +
+                "|      |      |      |      |\n" +
+                "|    4 |    3 |    2 |    1 |\n" +
+                "|      |      |      |      |\n" +
+                "+------+------+------+------+\n" 
+        
+        expect:
+        state.toString() == stringified
     }
 }
