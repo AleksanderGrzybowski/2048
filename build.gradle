@@ -8,14 +8,21 @@ description = "2048"
 
 sourceCompatibility = 1.8
 
+def mainClass = 'game.Main'
+
 repositories {
     mavenCentral()
 }
 
 jar {
     manifest {
-        attributes('Main-Class': 'game.Main')
+        attributes('Main-Class': mainClass)
     }
+}
+
+task run(type: JavaExec) {
+    main = mainClass
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 dependencies {
