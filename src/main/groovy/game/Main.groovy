@@ -4,7 +4,7 @@ import game.network.Server
 
 class Main {
 
-    private static int DEFAULT_PORT = 5432
+    private static int DEFAULT_PORT = 2048
     private static String ENV_VAR_PORT = "2048_PORT"
 
     static void main(String[] args) {
