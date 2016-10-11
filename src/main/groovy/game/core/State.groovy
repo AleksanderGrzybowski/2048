@@ -15,6 +15,7 @@ class State {
         this.grid = new int[gridSize][gridSize]
 
         2.times {
+            // small chance for equal rolls and overwriting, I ignore this
             Position pos = random.roll(gridSize)
             grid[pos.row][pos.col] = random.nextTile()
         }
@@ -43,7 +44,7 @@ class State {
     }
 
     private State copy() {
-        int[][] newGrid= new int[size][size]
+        int[][] newGrid = new int[size][size]
         (0..<size).each { int row ->
             newGrid[row] = grid[row].clone()
         }
@@ -110,7 +111,7 @@ class State {
     }
 
     State iterate(GridSwipeDirection direction) {
-        if (possibleMoves.empty) {
+        if (gameOver) {
             throw new GameOverException()
         }
         
@@ -134,7 +135,7 @@ class State {
         grid.each { int[] row ->
             result += "+------" * size + "+\n"
             result += "|      " * size + "|\n"
-            row.each { int value -> result += "| " + (value == 0 ? '    ' : String.format("%4d", value)) + " " }
+            row.each { int value -> result += "| " + (value == 0 ? "    " : String.format("%4d", value)) + " " }
             result += "|\n"
             result += "|      " * size + "|\n"
         }

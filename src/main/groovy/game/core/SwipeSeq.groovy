@@ -1,5 +1,7 @@
 package game.core
 
+// this is main swiping algorithm, I tried to mimic original 2048 behavior
+
 private static int[] shiftTo(int[] input, RowSwipeDirection direction) {
     List<Integer> inputList = input.clone() as List<Integer> // for removeAll
     int zerosCount = inputList.count { it == 0 }

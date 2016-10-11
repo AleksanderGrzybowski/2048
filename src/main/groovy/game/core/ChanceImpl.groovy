@@ -2,6 +2,8 @@ package game.core
 
 class ChanceImpl implements Chance {
 
+    private static final double CHANCE_FOR_TWO = 0.66
+    
     private Random random = new Random()
 
     @Override
@@ -13,6 +15,6 @@ class ChanceImpl implements Chance {
 
     @Override
     int nextTile() {
-        return (random.nextDouble() < 0.66) ? 2 : 4
+        return (random.nextDouble() < CHANCE_FOR_TWO) ? 2 : 4
     }
 }
