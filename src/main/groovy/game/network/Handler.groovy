@@ -1,5 +1,8 @@
 package game.network
 
+import groovy.util.logging.Log
+
+@Log
 class Handler implements Runnable {
 
     /**
@@ -24,6 +27,8 @@ class Handler implements Runnable {
         InputStream input = socket.inputStream
         OutputStream output = socket.outputStream
         Session session = new Session(new NetworkIO(input, output))
+        
+        log.info("Creating new session ${session.id}.")
 
         OutputStreamWriter osw = new OutputStreamWriter(output, TELNET_ENCODING)
         SET_CHARACTER_MODE_COMMAND.each { osw.write(it) }
@@ -32,6 +37,8 @@ class Handler implements Runnable {
 
         session.go()
 
+        log.info("Closing session ${session.id}.")
+        
         // There should be probably cleanup code here (or try-with-resources), but
         // in this case I don't really mind.
         socket.close()

@@ -4,9 +4,11 @@ import game.core.Chance
 import game.core.ChanceImpl
 import game.core.GridSwipeDirection
 import game.core.State
+import groovy.util.logging.Log
 
 import static game.core.GridSwipeDirection.*
 
+@Log
 class Session {
     private final Chance random = new ChanceImpl()
     private final IO io
@@ -14,6 +16,8 @@ class Session {
     private static final Map<String, GridSwipeDirection> MOVES = [a: LEFT, s: BOTTOM, w: TOP, d: RIGHT]
     private static final Set<String> POSSIBLE_KEYS = MOVES.keySet() + 'q'
     private static final String CLEAR_SCREEN = "\u001B[2J"
+
+    public final String id = UUID.randomUUID().toString().substring(0, 6)
 
     Session(IO io) {
         this.io = io
@@ -40,6 +44,8 @@ class Session {
         }
         State state = new State(gridSize, random)
 
+        log.info("${id} creating new grid size=${gridSize}.")
+
         io.write("\r\n*** Use WSAD keys to shift tiles around, 'q' to exit ***")
         io.read()
 
@@ -58,10 +64,13 @@ class Session {
                 continue
             }
 
+            log.info("${id} user input: ${line}.")
+
             io.write("\r\n\r\n")
 
             if (line == 'q') {
                 io.write("Thank you for playing!\r\n")
+                log.info("${id} ended game.")
                 break
             }
             
