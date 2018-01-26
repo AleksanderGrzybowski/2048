@@ -93,9 +93,9 @@ class StateSpec extends Specification {
                  [0, 0, 0, 0],
                  [0, 0, 0, 0],
                  [0, 0, 0, 0],
-                ] as int[][]
+                ] as int[][],
+                random
         )
-        state.random = random
 
         when:
         state = state.placeNewTile()
@@ -275,7 +275,7 @@ class StateSpec extends Specification {
                  [4, 3, 2, 1],
                 ] as int[][]
         )
-        
+
         String stringified = "+------+------+------+------+\n" +
                 "|      |      |      |      |\n" +
                 "|    1 |    2 |   31 |    4 |\n" +
@@ -292,8 +292,8 @@ class StateSpec extends Specification {
                 "|      |      |      |      |\n" +
                 "|    4 |    3 |    2 |    1 |\n" +
                 "|      |      |      |      |\n" +
-                "+------+------+------+------+\n" 
-        
+                "+------+------+------+------+\n"
+
         expect:
         state.toString() == stringified
     }

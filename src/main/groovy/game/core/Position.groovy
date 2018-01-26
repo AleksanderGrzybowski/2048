@@ -2,7 +2,7 @@ package game.core
 
 class Position {
 
-    int row, col
+    final int row, col
 
     private Position(int row, int col) {
         this.row = row

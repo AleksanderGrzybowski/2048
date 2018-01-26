@@ -2,8 +2,8 @@ package game.network
 
 class NetworkIO implements IO {
 
-    private InputStream input
-    private PrintWriter output
+    private final InputStream input
+    private final PrintWriter output
 
     NetworkIO(InputStream input, OutputStream output) {
         this.input = input
@@ -16,8 +16,8 @@ class NetworkIO implements IO {
     }
 
     @Override
-    void write(String message) {
-        output.write(message)
+    void write(String text) {
+        output.write(text)
         output.flush()
     }
 }

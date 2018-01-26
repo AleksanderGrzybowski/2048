@@ -4,7 +4,7 @@ class ChanceImpl implements Chance {
 
     private static final double CHANCE_FOR_TWO = 0.66
     
-    private Random random = new Random()
+    private final Random random = new Random()
 
     @Override
     Position roll(int gridSize) {

@@ -28,6 +28,13 @@ class State {
         }
     }
     
+    State(int[][] startingGrid, Chance random) {
+        this(startingGrid)
+        this.random = random
+    }
+
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
     private State() {}
 
     int getSize() {

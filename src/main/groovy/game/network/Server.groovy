@@ -10,9 +10,9 @@ class Server {
 
     private static final int THREAD_POOL_SIZE = 100
    
-    private int port
+    private final int port
 
-    private ExecutorService pool = Executors.newFixedThreadPool(THREAD_POOL_SIZE)
+    private final ExecutorService pool = Executors.newFixedThreadPool(THREAD_POOL_SIZE)
 
     Server(int port) {
         this.port = port

@@ -8,12 +8,12 @@ import game.core.State
 import static game.core.GridSwipeDirection.*
 
 class Session {
-    private Chance random = new ChanceImpl()
-    private IO io
+    private final Chance random = new ChanceImpl()
+    private final IO io
 
-    private static Map<String, GridSwipeDirection> MOVES = [a: LEFT, s: BOTTOM, w: TOP, d: RIGHT]
-    private static Set<String> POSSIBLE_KEYS = MOVES.keySet() + 'q'
-    private static String CLEAR_SCREEN = "\u001B[2J"
+    private static final Map<String, GridSwipeDirection> MOVES = [a: LEFT, s: BOTTOM, w: TOP, d: RIGHT]
+    private static final Set<String> POSSIBLE_KEYS = MOVES.keySet() + 'q'
+    private static final String CLEAR_SCREEN = "\u001B[2J"
 
     Session(IO io) {
         this.io = io
