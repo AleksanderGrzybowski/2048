@@ -1,0 +1,7 @@
+version: '2'
+services:
+  app-2048:
+    image: app-2048
+    build: .
+    ports:
+      - 61922:2048
