@@ -5,3 +5,4 @@ services:
     build: .
     ports:
       - 61922:2048
+    restart: always
