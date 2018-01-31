@@ -11,4 +11,4 @@ COPY --from=0 /2048/build/libs/2048-all.jar /
 
 WORKDIR /
 
-CMD java -jar 2048-all.jar
+CMD java -Xmx30m -jar 2048-all.jar
