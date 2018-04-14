@@ -10,6 +10,13 @@ import static game.core.GridSwipeDirection.*
 
 @Log
 class Session {
+
+    /**
+     * No idea what is this, but this character is sent forever when running check_tcp
+     * script from Icinga. This is needed to prevent infinite loop.
+     */
+    private static final String TCP_SCAN_CHARACTER = new String([65535] as char[])
+    
     private final Chance random = new ChanceImpl()
     private final IO io
 
@@ -30,7 +37,7 @@ class Session {
         int gridSize
         while (true) {
             String input = io.read() as String
-            if (input == 'q') {
+            if (input == 'q' || input == TCP_SCAN_CHARACTER) {
                 return
             }
             try {
