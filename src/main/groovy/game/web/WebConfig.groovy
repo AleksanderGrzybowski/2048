@@ -22,6 +22,12 @@ $ telnet {0} 32048
 
             return banner + '\n\n' + message
         }
+        
+        Spark.get('/health') { req, res ->
+            res.type('text/plain')
+            res.status(200)
+            return 'UP'
+        }
     }
 
     private static String loadBanner() {
