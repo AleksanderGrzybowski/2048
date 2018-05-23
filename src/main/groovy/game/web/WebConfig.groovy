@@ -9,7 +9,7 @@ class WebConfig {
 
     private static final String TEMPLATE = '''Welcome! To play, please connect to game server with telnet command from any Linux box:
 
-$ telnet {0} 2048
+$ telnet {0} 32048
 '''
 
     static void init() {
